@@ -90,5 +90,10 @@ abstract class BaseController
 
         return $v->failException(true)->check($data);
     }
+    public function __call($name, $arguments)
+    {
+        // TODO: 当所有的方法和控制器都无法访问时 到该方法
+
+    }
 
 }
