@@ -1,0 +1,75 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="renderer" content="webkit|ie-comp|ie-stand">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1.0,maximum-scale=1.0,user-scalable=no" />
+    <meta http-equiv="Cache-Control" content="no-siteapp" />
+    <link rel="Bookmark" href="favicon.ico" >
+    <link rel="Shortcut Icon" href="favicon.ico" />
+    <!--[if lt IE 9]>
+    <script type="text/javascript" src="__admin__/lib/html5.js"></script>
+    <script type="text/javascript" src="__admin__/lib/respond.min.js"></script>
+    <![endif]-->
+    <link rel="stylesheet" type="text/css" href="__admin__/h-ui/css/H-ui.min.css" />
+    <link rel="stylesheet" type="text/css" href="__admin__/h-ui.admin.pro/css/h-ui.admin.pro.min.css" />
+    <link rel="stylesheet" type="text/css" href="__admin__/lib/Hui-iconfont/1.0.9/iconfont.css" />
+    <link rel="stylesheet" type="text/css" href="__admin__/h-ui.admin.pro/skin/default/skin.css" id="skin" />
+    <link rel="stylesheet" type="text/css" href="__admin__/business/css/style.css" />
+    <!--[if IE 6]>
+    <script type="text/javascript" src="http://lib.h-ui.net/DD_belatedPNG_0.0.8a-min.js" ></script>
+    <script>DD_belatedPNG.fix('*');</script><![endif]-->
+    {block name="title"}
+    <title>会员列表 - 会员管理 - h-ui.admin.pro v1.0</title>
+    {/block}
+    {block name="seo"}
+    <meta name="keywords" content="h-ui.admin.pro v1.0,H-ui网站后台模版,后台模版下载,后台管理系统模版,HTML后台模版下载">
+    <meta name="description" content="h-ui.admin.pro v1.0，是一款由国人开发的轻量级扁平化网站后台模板，完全免费开源的网站后台管理系统模版，适合中小型CMS后台系统。">
+    {/block}
+</head>
+<body>
+<!--_menu 作为公共模版分离出去-->
+{include file='common:aside' /}
+<!--/_menu 作为公共模版分离出去-->
+<section class="Hui-admin-article-wrapper">
+    <!--_header 作为公共模版分离出去-->
+    {include file='common:header'}
+    <!--/_header 作为公共模版分离出去-->
+    <div class="Hui-admin-article">
+        {block name="path"}
+        <nav class="breadcrumb" style="background-color:#fff;padding: 0 24px">
+            首页
+            <span class="c-gray en">/</span>
+            空白页面
+        </nav>
+        {/block}
+        <article class="Hui-admin-content clearfix">
+            {block name="content"}
+            <div class="panel">
+                <div class="panel-body">
+                    这是个空白页，请在此处加入您的代码！
+                </div>
+            </div>
+            {/block}
+            <footer class="footer Hui-admin-footer">
+                <p>感谢jQuery、layer、laypage、Validform、UEditor、iconfont、Datatables、WebUploaded、icheck、highcharts、bootstrap-Switch<br> Copyright &copy;2015 h-ui.admin.pro v1.0 All Rights Reserved.<br> 本后台系统由<a href="http://www.h-ui.net/" target="_blank" title="H-ui前端框架">H-ui前端框架</a>提供前端技术支持</p>
+            </footer>
+        </article>
+    </div>
+</section>
+
+<!--_footer 作为公共模版分离出去-->
+<script type="text/javascript" src="__admin__/lib/jquery/1.9.1/jquery.min.js"></script>
+<script type="text/javascript" src="__admin__/lib/layer/3.1.1/layer.js"></script>
+<script type="text/javascript" src="__admin__/h-ui/js/H-ui.min.js"></script>
+<script type="text/javascript" src="__admin__/h-ui.admin.pro/js/h-ui.admin.pro.min.js"></script>
+<!--/_footer /作为公共模版分离出去-->
+{block name="javascript"}
+<!--请在下方写此页面业务相关的脚本-->
+<script type="text/javascript" src="__admin__/lib/laypage/1.2/laypage.js"></script>
+<script type="text/javascript" src="__admin__/business/js/main.js"></script>
+<!--/请在上方写此页面业务相关的脚本-->
+{/block}
+</body>
+</html>

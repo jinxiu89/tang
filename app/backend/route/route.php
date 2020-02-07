@@ -15,3 +15,7 @@ use think\facade\Route;
 Route::group('user', function () {
     Route::get('/login','User/login');
 })->prefix('backend/');
+//
+Route::group('/',function (){
+    Route::get('dashboard','Index/index');
+})->prefix('backend/');

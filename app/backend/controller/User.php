@@ -18,7 +18,6 @@ class User extends BaseController
         parent::__construct($app);
         $this->validate=new UserValidate();
         $this->business=new UserBusiness();
-
     }
     public function index(){
 
