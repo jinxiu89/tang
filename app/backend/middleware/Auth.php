@@ -11,6 +11,8 @@ declare(strict_types=1);
 namespace app\backend\middleware;
 
 
+use think\facade\Session;
+use think\facade\Request;
 class Auth{
     /***
      * @param $request
@@ -18,6 +20,10 @@ class Auth{
      * @return mixed
      */
     public function handle($request,\Closure $next){
+        $next_jump=Request::header('Referer') ?? '/backend/dashboard';
+        if(!Session::get('adminUser','')){
+            return redirect('/backend/user/login?next='.$next_jump);
+        }
         return $next($request);
     }
 }

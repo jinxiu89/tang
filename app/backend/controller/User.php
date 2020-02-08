@@ -9,11 +9,13 @@
  ***/
 declare(strict_types=1);
 namespace app\backend\controller;
-use app\backend\business\User as UserBusiness;use app\backend\validate\User as UserValidate;use app\BaseController;use Exception;use think\App;use think\facade\Session;use think\facade\View;
+use app\backend\business\User as UserBusiness;
+use app\backend\validate\User as UserValidate;use app\BaseController;use Exception;use think\App;use think\facade\Session;use think\facade\View;
 class User extends BaseController
 {
     protected $validate;
     protected $business;
+    protected $next;
     public function __construct(App $app) {
         parent::__construct($app);
         $this->validate=new UserValidate();
@@ -33,11 +35,11 @@ class User extends BaseController
 * @throws Exception
  */
     public function login(){
-        $next=$this->request->header('Referer') ?? '/';
+        $this->next=$this->request->param('next') ?? '/backend/dashboard';
         if($this->request->isGet()){
             //如果已经登录就需要跳转到他来的那一页去，默认是后台首页
             if(Session::get('adminUser')){
-                return redirect($next);
+                return redirect($this->next);
             }
             return View::fetch();
         }
@@ -47,10 +49,10 @@ class User extends BaseController
                 return jsonShow(0,$this->validate->getError());
             }
             try{
-                $result=$this->business->check($data);
+                $result=$this->business->login($data);
                 if($result['status'] == 1){
                     Session::set('adminUser',$result['data']);
-                    return jsonShow($result['status'],$result['message'],['next'=>$next]);
+                    return jsonShow($result['status'],$result['message'],['next'=>$this->next]);
                 }
                 return jsonShow($result['status'],$result['message']);
 

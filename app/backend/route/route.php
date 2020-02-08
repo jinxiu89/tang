@@ -8,7 +8,7 @@
  * 你还记得你吹过的牛逼吗？记住，默默的实现它。
  ***/
 use think\facade\Route;
-
+use app\backend\middleware\Auth;
 /**
  * 后台用户模块部分的路由分组
  */
@@ -18,4 +18,4 @@ Route::group('user', function () {
 //
 Route::group('/',function (){
     Route::get('dashboard','Index/index');
-})->prefix('backend/');
+})->prefix('backend/')->middleware(Auth::class);

@@ -9,16 +9,25 @@
 ***/
 declare(strict_types=1);
 namespace app\backend\business;
-use app\common\models\mysql\User as UserModel;
+use app\common\models\mysql\User as UserModel;use think\facade\Request;
 
 class User {
-    public function check(array $data){
+    public function login(array $data){
         $User=UserModel::getDataByUserName($data['username']);
         if($User->isEmpty()){
            return ['status'=>0,'message'=>'用户不存在'];
         }
         if($User->password !=$data['password']){
             return ['status'=>0,'message'=>'密码不正确'];
+        }
+        //更新登录数据
+        $upData=[
+            'login_num'=>$User->login_num+1,
+            'last_ip'=>get_client_ip()
+        ];
+        $upResult=UserModel::updateDataByID($User->id,$upData);
+        if($upResult->isEmpty()){
+            return ['status'=>1,'message'=>'登录成功,但更新失败','data'=>['id'=>$User->id,'username'=>$User->username]];
         }
         return ['status'=>1,'message'=>'登录成功','data'=>['id'=>$User->id,'username'=>$User->username]];
     }
