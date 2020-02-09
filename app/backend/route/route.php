@@ -15,7 +15,10 @@ use app\backend\middleware\Auth;
 Route::group('user', function () {
     Route::get('/login','User/login');
 })->prefix('backend/');
-//
+/**
+* Route
+ * 后台需要认证的路由分组，每条路由都有一个name（）,在后面的url生成时非常有用
+ */
 Route::group('/',function (){
-    Route::get('dashboard','Index/index');
+    Route::get('dashboard','Index/index')->name('dashboard');
 })->prefix('backend/')->middleware(Auth::class);
