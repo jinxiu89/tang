@@ -13,12 +13,18 @@ use app\backend\middleware\Auth;
  * 后台用户模块部分的路由分组
  */
 Route::group('user', function () {
-    Route::get('/login','User/login');
+    Route::get('/login','User/login')->name('login');
 })->prefix('backend/');
+Route::group('user',function (){
+    Route::get('/list','User/index')->name('user_list');
+    Route::get('/add','User/add')->name('user_add');
+    Route::get('/edit/:id','User/edit')->name('user_edit')->pattern(['id'=>'\d+']);
+})->middleware(Auth::class);
 /**
 * Route
  * 后台需要认证的路由分组，每条路由都有一个name（）,在后面的url生成时非常有用
  */
 Route::group('/',function (){
-    Route::get('dashboard','Index/index')->name('dashboard');
+    Route::get('index','Index/index')->name('index');
+    Route::get('welcome','Index/welcome')->name('welcome');
 })->prefix('backend/')->middleware(Auth::class);

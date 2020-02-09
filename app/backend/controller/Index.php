@@ -13,8 +13,10 @@ class Index extends BaseController
         }
     }
 
-    public function hello($name = 'ThinkPHP6')
+    public function welcome()
     {
-        return 'hello,' . $name;
+        if($this->request->isGet()){//todo:: 后期仪表盘里的数据在这里读取
+            return View::fetch();
+        }
     }
 }

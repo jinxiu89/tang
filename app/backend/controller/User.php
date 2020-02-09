@@ -21,11 +21,43 @@ class User extends BaseController
         $this->validate=new UserValidate();
         $this->business=new UserBusiness();
     }
-    public function index(){
 
+    public function index(){
+        if($this->request->isGet()){
+            try{
+                $data=$this->business->GetDataByStatus();
+                return View::fetch('',[
+                'data'=>$data,]);
+            }catch (Exception $exception){
+                return jsonShow(0,$exception->getMessage(),[],500);
+            }
+        }
     }
     public function add(){
-
+        if($this->request->isGet()){
+            return View::fetch();
+        }
+        if($this->request->isPost()){
+            //添加操作
+        }
+    }
+    /***
+    * @param int $id
+    * @return string
+    */
+    public function edit(int $id){
+        if($this->request->isGet()){
+            $user_id=$this->request->param('id','',['int','trim','htmlentities']);
+            if(!$this->validate->scene('id')->check(['id'=>$user_id])){
+                dump($this->validate->getError());
+            }
+            try{
+                $result=$this->business->getData((int) $user_id);
+                return View::fetch('',['data'=>$result]);
+            }catch (Exception $exception){
+                dump($exception->getMessage());
+            }
+        }
     }
 
     /***
@@ -35,11 +67,11 @@ class User extends BaseController
 * @throws Exception
  */
     public function login(){
-        $this->next=$this->request->param('next') ?? '/backend/dashboard';
+        $this->next=$this->request->param('next') ?? (string) url('index');
         if($this->request->isGet()){
             //如果已经登录就需要跳转到他来的那一页去，默认是后台首页
             if(Session::get('adminUser')){
-                return redirect($this->next);
+                return redirect((string) $this->next);
             }
             return View::fetch();
         }

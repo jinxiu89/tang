@@ -33,4 +33,10 @@ class User extends Model{
 
         return self::update($data,['id'=>$id]);
     }
+    public static function GetDataByStatS(int $status=1){
+        return self::where(['status'=>$status])->order('id', 'desc')->paginate(5);
+    }
+    public static function getDataById(int $id){
+        return self::findOrEmpty($id);
+    }
 }

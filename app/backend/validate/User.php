@@ -12,17 +12,21 @@ namespace app\backend\validate;
 use think\Validate;
 class User extends Validate{
     protected $rule=[
+        'id'=>'require|number',
         'name'=>'require|max:25',
         'password'=>'require',
         'email'=>'email'
     ];
     protected $message=[
+        'id.require'=>'ID不能为空',
+        'id.number'=>'ID不合法',
         'name.require'=>'名称必须填',
         'name.max'=>'名称最多不能超过25个字符',
         'email'=>'邮箱格式不对',
         ];
     protected $scene=[
         'email'=>['email','password'],
-        'name'=>['name','password']
+        'name'=>['name','password'],
+        'id'=>['id']
         ];
 }

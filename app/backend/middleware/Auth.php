@@ -20,7 +20,7 @@ class Auth{
      * @return mixed
      */
     public function handle($request,\Closure $next){
-        $next_jump=Request::header('Referer') ?? '/backend/dashboard';
+        $next_jump=Request::header('Referer') ?? url('index');
         if(!Session::get('adminUser','')){
             return redirect('/backend/user/login?next='.$next_jump);
         }

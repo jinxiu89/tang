@@ -9,12 +9,12 @@
 ***/
 declare(strict_types=1);
 namespace app\backend\business;
-use app\common\models\mysql\User as UserModel;use think\facade\Request;
+use app\common\models\mysql\User as UserModel;
 
 class User {
     public function login(array $data){
         $User=UserModel::getDataByUserName($data['username']);
-        if($User->isEmpty()){
+        if($User->isEmpty()){//TODO：：这里后面改成异常形式
            return ['status'=>0,'message'=>'用户不存在'];
         }
         if($User->password !=$data['password']){
@@ -30,5 +30,17 @@ class User {
             return ['status'=>1,'message'=>'登录成功,但更新失败','data'=>['id'=>$User->id,'username'=>$User->username]];
         }
         return ['status'=>1,'message'=>'登录成功','data'=>['id'=>$User->id,'username'=>$User->username]];
+    }
+    /**
+    * GetNormalData
+ * 获得正常的用户数据列表
+    */
+    public function GetDataByStatus(){
+        $obj=UserModel::GetDataByStatS();
+        return $obj->toArray();
+    }
+    public function getData(int $id){
+        $obj=UserModel::getDataById((int) $id);
+        return $obj->toArray();
     }
 }
