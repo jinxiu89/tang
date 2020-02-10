@@ -15,20 +15,22 @@ use think\Model;
 class User extends Model{
     protected $table='admin_user';
     /***
- * 根据用户名来获得数据
-* @param string $username
- * @return array|\think\db\concern\Model
- */
+    * getDataByUserName
+    * 根据用户名来获得数据
+    * @param string $username
+    * @return array|\think\db\concern\Model
+    */
     public static function getDataByUserName(string $username){
         return self::where(['username'=>$username])->findOrEmpty();
     }
+
     /***
- * updateDataByID
- * 根据ID更新数据
- * @param int $id
- * @param array $data
- * @return User
- */
+    * updateDataByID
+    * 根据ID更新数据
+    * @param int $id
+    * @param array $data
+    * @return User
+    */
     public static function updateDataByID(int $id,array $data){
 
         return self::update($data,['id'=>$id]);

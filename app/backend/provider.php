@@ -7,7 +7,7 @@
  * 人生得意需尽欢，莫使金樽空对月。
  * 你还记得你吹过的牛逼吗？记住，默默的实现它。
  ***/
-use app\frontend\exception\Exception;//应用异常注入
+use app\backend\exception\Exception;//应用异常注入
 
 // 容器Provider定义文件
 return [

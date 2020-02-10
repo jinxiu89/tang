@@ -9,27 +9,44 @@
 ***/
 declare(strict_types=1);
 namespace app\backend\business;
-use app\common\models\mysql\User as UserModel;
+use app\common\models\mysql\User as UserModel;use think\facade\Session;
 
 class User {
+    /***
+    * 登录业务逻辑
+    ** 升级 通过异常来捕获错误，而不采用状态值传递至控制器层
+    * @param array $data
+    * @return bool
+    */
     public function login(array $data){
         $User=UserModel::getDataByUserName($data['username']);
-        if($User->isEmpty()){//TODO：：这里后面改成异常形式
-           return ['status'=>0,'message'=>'用户不存在'];
+        if($User->isEmpty()){
+            abort(500,"用户不存在");
         }
         if($User->password !=$data['password']){
-            return ['status'=>0,'message'=>'密码不正确'];
+            abort(500,"密码不正确");
         }
         //更新登录数据
-        $upData=[
-            'login_num'=>$User->login_num+1,
-            'last_ip'=>get_client_ip()
-        ];
+        $upData=['login_num'=>$User->login_num+1,'last_ip'=>get_client_ip()];
+        //更新
         $upResult=UserModel::updateDataByID($User->id,$upData);
         if($upResult->isEmpty()){
-            return ['status'=>1,'message'=>'登录成功,但更新失败','data'=>['id'=>$User->id,'username'=>$User->username]];
+            abort(500,'登录失败');
         }
-        return ['status'=>1,'message'=>'登录成功','data'=>['id'=>$User->id,'username'=>$User->username]];
+        //写入session,这里写session 异常待处理
+        Session::set('adminUser',['id'=>$User->id,'username'=>$User->username]);
+        return true;
+    }
+    /***
+    * @param array $data
+    * @return array
+    */
+    public function update(array $data){
+        $upResult=UserModel::updateDataByID((int) $data['id'],(array)$data);
+        if($upResult->isEmpty()){
+            return ['status'=>1,'message'=>'跟新失败'];
+        }
+        return ['status'=>1,'message'=>'更新成功'];
     }
     /**
     * GetNormalData

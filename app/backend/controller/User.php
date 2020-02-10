@@ -9,8 +9,7 @@
  ***/
 declare(strict_types=1);
 namespace app\backend\controller;
-use app\backend\business\User as UserBusiness;
-use app\backend\validate\User as UserValidate;use app\BaseController;use Exception;use think\App;use think\facade\Session;use think\facade\View;
+use app\backend\business\User as UserBusiness;use app\backend\validate\User as UserValidate;use app\BaseController;use Exception;use think\App;use think\facade\Session;use think\facade\View;
 class User extends BaseController
 {
     protected $validate;
@@ -42,10 +41,9 @@ class User extends BaseController
         }
     }
     /***
-    * @param int $id
     * @return string
     */
-    public function edit(int $id){
+    public function edit(){
         if($this->request->isGet()){
             $user_id=$this->request->param('id','',['int','trim','htmlentities']);
             if(!$this->validate->scene('id')->check(['id'=>$user_id])){
@@ -58,14 +56,29 @@ class User extends BaseController
                 dump($exception->getMessage());
             }
         }
+        if($this->request->isPost()){
+            $data=input('post.',[],'htmlspecialchars');
+            if(!$this->validate->scene('edit')->check($data)){
+                return jsonShow(0,$this->validate->getError());
+            }
+            try{
+                $result=$this->business->update((array) $data);
+                /*if($result['status'] == 1){
+                    return jsonShow($result['status'],$result['message']);
+                }*/
+                return jsonShow($result['status'],$result['message']);
+            }catch (Exception $exception){
+                return jsonShow(0,$exception->getMessage());
+            }
+        }
     }
 
     /***
- * login
- * 登录方法，采用多层架构编写
-* @return string|\think\response\Json
-* @throws Exception
- */
+    * login
+    * 登录方法，采用多层架构编写
+    * @return string|\think\response\Json
+    * @throws Exception
+    */
     public function login(){
         $this->next=$this->request->param('next') ?? (string) url('index');
         if($this->request->isGet()){
@@ -77,17 +90,15 @@ class User extends BaseController
         }
         if($this->request->isPost()){
             $data=input('post.',[],'htmlspecialchars');
-            if(!$this->validate->scene('email')->check($data)){//验证
+            if(!$this->validate->scene('name')->check($data)){//验证
                 return jsonShow(0,$this->validate->getError());
             }
             try{
                 $result=$this->business->login($data);
-                if($result['status'] == 1){
-                    Session::set('adminUser',$result['data']);
-                    return jsonShow($result['status'],$result['message'],['next'=>$this->next]);
+                if($result){
+                    return jsonShow(1,'登录成功！',['next'=>$this->next]);
                 }
-                return jsonShow($result['status'],$result['message']);
-
+                return jsonShow(0,'登录失败未知原因');
             }catch (Exception $exception){
                 return jsonShow(0,$exception->getMessage());
             }
