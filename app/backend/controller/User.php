@@ -37,7 +37,23 @@ class User extends BaseController
             return View::fetch();
         }
         if($this->request->isPost()){
-            //添加操作
+            $data=input('post.',[],'htmlspecialchars');
+            if(!$this->validate->scene('add')->check($data)){
+                return jsonShow(0,$this->validate->getError());
+            }
+            try{
+                $arr=explode('.',uniqid('',true));
+                $data['uuid']=$arr[0]; // 生成Uuid
+                $data['salt']=$arr[1]; //生成随机的加盐码
+                $data['password']=md5($data['password'].$data['salt']); //把密码加盐后加密
+                $data['action_user']=Session::get('adminUser')['username'];
+                $result=$this->business->add($data);
+                if($result){
+                    return jsonShow(1,"新增成功");
+                }
+            }catch (Exception $exception){
+                return jsonShow(0,'服务器内部错误');
+            }
         }
     }
     /***
@@ -63,10 +79,10 @@ class User extends BaseController
             }
             try{
                 $result=$this->business->update((array) $data);
-                /*if($result['status'] == 1){
-                    return jsonShow($result['status'],$result['message']);
-                }*/
-                return jsonShow($result['status'],$result['message']);
+                if($result){
+                    return jsonShow(1,'更新成功');
+                }
+                return jsonShow(0,'更新失败');
             }catch (Exception $exception){
                 return jsonShow(0,$exception->getMessage());
             }

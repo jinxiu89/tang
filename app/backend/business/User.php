@@ -12,6 +12,12 @@ namespace app\backend\business;
 use app\common\models\mysql\User as UserModel;use think\facade\Session;
 
 class User {
+    protected $UserModel=null;
+
+    public function __construct() {
+        $this->UserModel=new UserModel();
+    }
+
     /***
     * 登录业务逻辑
     ** 升级 通过异常来捕获错误，而不采用状态值传递至控制器层
@@ -19,35 +25,61 @@ class User {
     * @return bool
     */
     public function login(array $data){
-        $User=UserModel::getDataByUserName($data['username']);
+        $User=$this->UserModel::getDataByUserName($data['username']);
         if($User->isEmpty()){
             abort(500,"用户不存在");
         }
-        if($User->password !=$data['password']){
+        if(md5($data['password'].$User->salt) !=$User->password){
             abort(500,"密码不正确");
         }
         //更新登录数据
-        $upData=['login_num'=>$User->login_num+1,'last_ip'=>get_client_ip()];
+        $upData=['login_num'=>$User->login_num+1,'last_ip'=>get_client_ip(),'last_login'=>time()];
         //更新
-        $upResult=UserModel::updateDataByID($User->id,$upData);
-        if($upResult->isEmpty()){
-            abort(500,'登录失败');
+        try{
+            $upResult=$this->UserModel::updateDataByID($User->id,$upData);
+            if($upResult->isEmpty()){
+                abort(500,'登录失败，内部数据异常');
+            }
+            //写入session,这里写session 异常待处理
+            Session::set('adminUser',['id'=>$User->id,'username'=>$User->username]);
+            return true;
+        }catch (\Exception $exception){//数据库错误时会出发该异常
+            abort(500,"服务器内部异常");
         }
-        //写入session,这里写session 异常待处理
-        Session::set('adminUser',['id'=>$User->id,'username'=>$User->username]);
-        return true;
+        return false;
     }
+
+    public function add(array $data){
+        try{
+            $result=$this->UserModel::create($data);
+            return $result->id;
+        }catch (\Exception $exception){
+            abort(500,"服务器内部异常");
+        }
+    }
+
+
     /***
+    * update
+    * 用户提交后台
     * @param array $data
-    * @return array
+    * @return bool
     */
     public function update(array $data){
-        $upResult=UserModel::updateDataByID((int) $data['id'],(array)$data);
-        if($upResult->isEmpty()){
-            return ['status'=>1,'message'=>'跟新失败'];
+        try{
+
+            $upResult=$this->UserModel::updateDataByID((int) $data['id'],(array)$data);
+            if($upResult->isEmpty()){
+                return false;
+            }
+            return true;
+        }catch (\Exception $exception){//数据库错误时会出发该异常
+            abort(500,"服务器内部异常");
         }
-        return ['status'=>1,'message'=>'更新成功'];
+        return false;
     }
+
+
     /**
     * GetNormalData
  * 获得正常的用户数据列表

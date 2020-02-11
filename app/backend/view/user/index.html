@@ -27,20 +27,22 @@
                         <colgroup>
                             <col width="10">
                             <col width="40">
-                            <col width="80">
-                            <col width="80">
-                            <col width="80">
-                            <col width="80">
-                            <col width="80">
                             <col>
+                            <col width="10">
+                            <col width="80">
+                            <col width="80">
+                            <col width="80">
+                            <col width="80">
+                            <col width="200">
                         </colgroup>
                         <thead>
                         <tr>
                             <th>ID</th>
                             <th>登录名</th>
-                            <th>手机</th>
-                            <th>邮箱</th>
                             <th>角色</th>
+                            <th>登录次数</th>
+                            <th>最后登录</th>
+                            <th>登录IP</th>
                             <th>加入时间</th>
                             <th>状态</th>
                             <th>操作</th>
@@ -51,22 +53,26 @@
                         <tr>
                             <td>{$vo.id}</td>
                             <td>{$vo.username}</td>
-                            <td>18925139194</td>
-                            <td>113664000@qq.com</td>
-                            <td>超级管理员</td>
+                            <td>待开发</td>
+                            <td>{$vo.login_num}</td>
+                            <td>{$vo.last_login|date='Y-m-d'}</td>
+                            <td>{$vo.last_ip}</td>
                             <td>{$vo.create_time|date='Y-m-d'}</td>
                             <td class="td-status">
                                 <span class="layui-btn layui-btn-normal layui-btn-mini">已启用</span></td>
                             <td class="td-manage">
-                                <a onclick="member_stop(this,'10001')" href="javascript:;" title="启用">
+                                <!--<a onclick="member_stop(this,'10001')" href="javascript:;" title="启用">
                                     <i class="layui-icon">&#xe601;</i>
+                                </a>-->
+                                <a title="编辑" onclick="xadmin.open('编辑','{:url(\'user_edit\',[\'id\'=>$vo.id])}','','',true)" href="javascript:;" class="layui-btn">
+                                    <i class="layui-icon" style="font-size: 22px">&#xe642;</i>
                                 </a>
-                                <a title="编辑" onclick="xadmin.open('编辑','{:url(\'user_edit\',[\'id\'=>$vo.id])}','','',true)" href="javascript:;">
-                                    <i class="layui-icon">&#xe642;</i>
+                                <a title="编辑" onclick="xadmin.open('编辑','{:url(\'user_edit\',[\'id\'=>$vo.id])}','','',true)" href="javascript:;" class="layui-btn">
+                                    <i class="layui-icon" style="font-size: 22px">&#xe642;</i>
                                 </a>
-                                <a title="删除" onclick="member_del(this,'要删除的id')" href="javascript:;">
+                                <!--<a title="删除" onclick="member_del(this,'要删除的id')" href="javascript:;">
                                     <i class="layui-icon">&#xe640;</i>
-                                </a>
+                                </a>-->
                             </td>
                         </tr>
                         </tr>

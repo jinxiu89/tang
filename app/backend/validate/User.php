@@ -15,6 +15,7 @@ class User extends Validate{
         'id'=>'require|number',
         'username'=>'require|max:25',
         'password'=>'require',
+        'rnd'=>'require|max:8',
         'email'=>'require|email'
     ];
     protected $message=[
@@ -22,12 +23,15 @@ class User extends Validate{
         'id.number'=>'ID不合法',
         'username.require'=>'名称必须填',
         'username.max'=>'名称最多不能超过25个字符',
+        'rnd.require'=>'安全码必须填',
+        'rnd.max'=>'安全吗最大不能超过8个字符',
         'email.require'=>'邮箱必须填',
         'email.email'=>'邮箱格式不对',
         ];
     protected $scene=[
         'email'=>['email','password'],
         'name'=>['username','password'],
+        'add'=>['username','password','rnd'],
         'edit'=>['id','username','password'],
         'id'=>['id']
         ];
