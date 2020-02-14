@@ -15,10 +15,14 @@ use app\backend\middleware\Auth;
 Route::group('user', function () {
     Route::get('/login','User/login')->name('login');
 })->prefix('backend/');
+
 Route::group('user',function (){
-    Route::get('/list','User/index')->name('user_list');
-    Route::get('/add','User/add')->name('user_add');
-    Route::get('/edit/:id','User/edit')->name('user_edit')->pattern(['id'=>'\d+']);
+    Route::rule('/list','User/index','GET')->name('user_list');
+    Route::rule('/add','User/add','GET|POST')->name('user_add');
+    Route::rule('/edit/:id','User/edit','GET|POST')->name('user_edit')->pattern(['id'=>'\d+']);
+    //权限
+    Route::rule('/permission_group','PermissionGroup/index','GET')->name('permission_group');
+    Route::rule('/add_permission_group','PermissionGroup/add','POST')->name('add_permission_group');
 })->middleware(Auth::class);
 /**
 * Route
