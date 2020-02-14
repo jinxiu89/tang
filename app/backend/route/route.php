@@ -7,28 +7,30 @@
  * 人生得意需尽欢，莫使金樽空对月。
  * 你还记得你吹过的牛逼吗？记住，默默的实现它。
  ***/
+
 use think\facade\Route;
 use app\backend\middleware\Auth;
+
 /**
  * 后台用户模块部分的路由分组
  */
 Route::group('user', function () {
-    Route::get('/login','User/login')->name('login');
+    Route::get('/login', 'User/login')->name('login');
 })->prefix('backend/');
 
-Route::group('user',function (){
-    Route::rule('/list','User/index','GET')->name('user_list');
-    Route::rule('/add','User/add','GET|POST')->name('user_add');
-    Route::rule('/edit/:id','User/edit','GET|POST')->name('user_edit')->pattern(['id'=>'\d+']);
+Route::group('user', function () {
+    Route::rule('/list', 'User/index', 'GET')->name('user_list');
+    Route::rule('/add', 'User/add', 'GET|POST')->name('user_add');
+    Route::rule('/edit/:id', 'User/edit', 'GET|POST')->name('user_edit')->pattern(['id' => '\d+']);
     //权限
-    Route::rule('/permission_group','PermissionGroup/index','GET')->name('permission_group');
-    Route::rule('/add_permission_group','PermissionGroup/add','POST')->name('add_permission_group');
+    Route::rule('/permission_group', 'PermissionGroup/index', 'GET')->name('permission_group');
+    Route::rule('/add_permission_group', 'PermissionGroup/add', 'POST')->name('add_permission_group');
 })->middleware(Auth::class);
 /**
-* Route
+ * Route
  * 后台需要认证的路由分组，每条路由都有一个name（）,在后面的url生成时非常有用
  */
-Route::group('/',function (){
-    Route::get('index','Index/index')->name('index');
-    Route::get('welcome','Index/welcome')->name('welcome');
+Route::group('/', function () {
+    Route::get('index', 'Index/index')->name('index');
+    Route::get('welcome', 'Index/welcome')->name('welcome');
 })->prefix('backend/')->middleware(Auth::class);

@@ -8,6 +8,7 @@
  * 你还记得你吹过的牛逼吗？记住，默默的实现它。
  ***/
 declare(strict_types=1);
+
 namespace app\backend\exception;
 
 use think\exception\Handle;
@@ -18,7 +19,8 @@ use Throwable;
 
 class Exception extends Handle
 {
-    protected $httpStatus=500;
+    protected $httpStatus = 500;
+
     /**
      * Render an exception into an HTTP response.
      *
@@ -33,9 +35,9 @@ class Exception extends Handle
             //
         }*/
         //如果异常由Http异常抛出，还是ajax/post请求，就使用json数据抛出
-        if($e instanceof HttpException && $request->isPost()){
-            return jsonShow(0,$e->getMessage(),[],$e->getStatusCode());
+        if ($e instanceof HttpException && $request->isPost()) {
+            return jsonShow(0, $e->getMessage(), [], $e->getStatusCode());
         }
-        return parent::render($request,$e);
+        return parent::render($request, $e);
     }
 }
