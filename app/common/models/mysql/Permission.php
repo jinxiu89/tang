@@ -1,6 +1,6 @@
 <?php
 /***
-* File Name :PermissionGroup.php
+* File Name :Permission.php
 * Create by kevin
 * Author:jinxiu89@163.com
 * Create Date :2020/2/11 下午10:27
@@ -13,13 +13,17 @@ namespace app\common\models\mysql;
 
 
 use think\Model;
-class PermissionGroup extends Model {
-    protected $table="permission_group";
+class Permission extends Model {
+    protected $table="permission";
 
     public static function getDataByName(){
 
     }
     public static function getDataByStatus(int $status){
         return self::where(['status'=>$status])->order('id desc')->paginate(5);
+    }
+
+    public static function getAllData(int $status){
+        return self::where(['status'=>$status])->field('id,name')->order('id desc')->select();
     }
 }

@@ -1,6 +1,6 @@
 <?php
 /***
- * File Name :PermissionGroup.php
+ * File Name :Permission.php
  * Create by kevin
  * Author:jinxiu89@163.com
  * Create Date :2020/2/11 下午10:14
@@ -12,9 +12,9 @@ declare(strict_types=1);
 namespace app\backend\business;
 
 use think\db\exception\DbException;
-use app\common\models\mysql\PermissionGroup as model;
+use app\common\models\mysql\Permission as model;
 
-class PermissionGroup
+class Permission
 {
     protected $model = null;
 
@@ -30,6 +30,14 @@ class PermissionGroup
             return $result->toArray();
         } catch (\Exception $exception) {
             abort(500, "服务器内部错误");
+        }
+    }
+    public function getAllData(int $status=1){
+        try {
+            $result = $this->model->getAllData($status);
+            return $result->toArray();
+        } catch (\Exception $exception){
+            return [];
         }
     }
 

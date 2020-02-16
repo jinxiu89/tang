@@ -1,0 +1,216 @@
+{extend name="common:base"}
+{block name="body"}
+<div class="x-nav">
+          <span class="layui-breadcrumb">
+            <a href="">首页</a>
+            <a href=""><cite>权限组</cite></a>
+          </span>
+    <a class="layui-btn layui-btn-small" style="line-height:1.6em;margin-top:3px;float:right"
+       onclick="location.reload()" title="刷新">
+        <i class="layui-icon layui-icon-refresh" style="line-height:30px"></i></a>
+</div>
+<div class="layui-fluid">
+    <div class="layui-row layui-col-space15">
+        <div class="layui-col-md12">
+            <div class="layui-card">
+                <div class="layui-card-body ">
+                    <form class="layui-form layui-col-space5" method="post">
+                        <div class="layui-inline layui-show-xs-block">
+                            <select name="pid" lay-verify="required">
+                                <option value=""></option>
+                                <option value="0">顶级分类</option>
+                                {volist name="parent" id="vo"}
+                                <option value="{$vo.id}">{$vo.name}</option>
+                                {/volist}
+                            </select>
+                        </div>
+                        <div class="layui-inline layui-show-xs-block" style="width: 200px">
+                            <input type="text" name="name" required lay-verify="required" placeholder="权限名称"
+                                   autocomplete="off" class="layui-input">
+                        </div>
+                        <div class="layui-input-inline layui-show-xs-block" style="width: 250px">
+                            <input type="text" name="handler" placeholder="权限节点" autocomplete="off" class="layui-input">
+                        </div>
+
+                        <div class="layui-inline layui-show-xs-block">
+                            <button class="layui-btn" lay-submit lay-filter="add"><i class="layui-icon"></i>增加</button>
+                        </div>
+                    </form>
+                </div>
+                <!--                <div class="layui-card-header">-->
+                <!--                    <button class="layui-btn layui-btn-danger" onclick="delAll()"><i class="layui-icon"></i>批量删除</button>-->
+                <!--                </div>-->
+                <div class="layui-card-body ">
+                    <table class="layui-table layui-form" id="tree-table">
+                    </table>
+                </div>
+                <div class="layui-card-body">
+                    <div class="page" id="page"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{/block}
+{block name="javascript"}
+<script>
+    layui.config({
+        base: '__admin__/extend/',
+    });
+    layui.use(['treeTable', 'layer', 'form', 'laypage'], function () {
+        var o = layui.$,
+            form = layui.form,
+            layer = layui.layer,
+            treeTable = layui.treeTable,
+            laypage = layui.laypage;
+        treeTable.render({
+            elem: '#tree-table',
+            url: '{:url(\'permission_list\',[\'page\'=>$data.current_page])}',
+            // data:[{"id":1,"pid":0,"title":"1-1"},{"id":2,"pid":0,"title":"1-2"},{"id":3,"pid":0,"title":"1-3"},{"id":4,"pid":1,"title":"1-1-1"},{"id":5,"pid":1,"title":"1-1-2"},{"id":6,"pid":2,"title":"1-2-1"},{"id":7,"pid":2,"title":"1-2-3"},{"id":8,"pid":3,"title":"1-3-1"},{"id":9,"pid":3,"title":"1-3-2"},{"id":10,"pid":4,"title":"1-1-1-1"},{"id":11,"pid":4,"title":"1-1-1-2"}],
+            icon_key: 'name',
+            is_checkbox: true,
+            /*checked: {
+                key: 'id',
+                data: [0,1,4,10,11,5,2,6,7,3,8,9],
+            },*/
+            end: function (e) {
+                form.render();
+            },
+            cols: [
+                {
+                    key: 'id',
+                    title: 'ID',
+                    width: '40px',
+                    align: 'center',
+                },
+                {
+                    key: 'name',
+                    title: '名称',
+                    width: '220px',
+                    template: function (item) {
+                        return '<span>' + item.name + '</span>';
+                    }
+                },
+                {
+                    key: "handler",
+                    title: "权限节点",
+                    width: '220px',
+                },
+                {
+                    key: 'pid',
+                    title: '父ID',
+                    width: '100px',
+                    align: 'center',
+                    template: function (item) {
+                        return "父分类名";
+                    }
+                },
+                {
+                    key: 'create_time',
+                    title: '创建日期',
+                    width: '130px',
+                },
+                {
+                    key: 'update_time',
+                    title: '更新时间',
+                    width: '130px',
+                },
+                {
+                    title: '状态',
+                    width: '100px',
+                    align: 'center',
+                    template: function (item) {
+                        return '<input type="checkbox" name="close" lay-skin="switch" lay-text="正常|禁用">';
+                    }
+                },
+                {
+                    title: '操作',
+                    align: 'center',
+                    template: function (item) {
+                        return '<a lay-filter="add">添加</a> | <a target="_blank" href="/detail?id=' + item.id + '">编辑</a>';
+                    }
+                }
+            ]
+        });
+        form.on('submit(add)', function (data) {
+                $.ajax({
+                    url: '{:url(\'add_permission\')}',
+                    type: 'POST',
+                    data: data.field,
+                    success: function (result) {
+                        if (result.status === 1) {
+                            layer.msg(result.message, {icon: 6, time: 1000}, function () {
+                                xadmin.father_reload();
+                            });
+                        } else {
+                            layer.msg(result.message, {icon: 5, time: 2000});
+                        }
+                    }
+                }, 'JSON');
+                return false;
+            }
+        );
+        laypage.render({
+            elem: 'page'
+            , count: '{$data.total}'
+            , limit: '{$data.per_page}'
+            , curr: '{$data.current_page}'
+            //layui 的标准写法，参考手册
+            , jump: function (obj, first) {
+                if (!first) {
+                    location.href = "?page=" + obj.curr;
+                }
+            }
+        });
+        // // 监听展开关闭
+        // treeTable.on('tree(flex)',function(data){
+        //     layer.msg(JSON.stringify(data));
+        // });
+    });
+
+    /*用户-停用*/
+    function member_stop(obj, id) {
+        layer.confirm('确认要停用吗？', function (index) {
+
+            if ($(obj).attr('title') == '启用') {
+
+                //发异步把用户状态进行更改
+                $(obj).attr('title', '停用');
+                $(obj).find('i').html('&#xe62f;');
+
+                $(obj).parents("tr").find(".td-status").find('span').addClass('layui-btn-disabled').html('已停用');
+                layer.msg('已停用!', {icon: 5, time: 1000});
+
+            } else {
+                $(obj).attr('title', '启用');
+                $(obj).find('i').html('&#xe601;');
+
+                $(obj).parents("tr").find(".td-status").find('span').removeClass('layui-btn-disabled').html('已启用');
+                layer.msg('已启用!', {icon: 5, time: 1000});
+            }
+
+        });
+    }
+
+    /*用户-删除*/
+    function member_del(obj, id) {
+        layer.confirm('确认要删除吗？', function (index) {
+            //发异步删除数据
+            $(obj).parents("tr").remove();
+            layer.msg('已删除!', {icon: 1, time: 1000});
+        });
+    }
+
+
+    function delAll(argument) {
+
+        var data = tableCheck.getData();
+
+        layer.confirm('确认要删除吗？' + data, function (index) {
+            //捉到所有被选中的，发异步进行删除
+            layer.msg('删除成功', {icon: 1});
+            $(".layui-form-checked").not('.header').parents('tr').remove();
+        });
+    }
+</script>
+{/block}

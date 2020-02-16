@@ -23,8 +23,9 @@ Route::group('user', function () {
     Route::rule('/add', 'User/add', 'GET|POST')->name('user_add');
     Route::rule('/edit/:id', 'User/edit', 'GET|POST')->name('user_edit')->pattern(['id' => '\d+']);
     //权限
-    Route::rule('/permission_group', 'PermissionGroup/index', 'GET')->name('permission_group');
-    Route::rule('/add_permission_group', 'PermissionGroup/add', 'POST')->name('add_permission_group');
+    Route::rule('/permission/list', 'Permission/list', 'GET')->name('permission_list');
+    Route::rule('/permission', 'Permission/index', 'GET')->name('permission');
+    Route::rule('/add_permission', 'Permission/add', 'POST')->name('add_permission');
 })->middleware(Auth::class);
 /**
  * Route
