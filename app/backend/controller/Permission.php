@@ -44,16 +44,15 @@ class Permission extends BaseController
     public function index()
     {
         if ($this->request->isGet()) {
-            $parent=$this->business->getAllData();
-            $data=$this->permission_list;
-            unset($data['data']);
-            return View::fetch('',['parent'=>$parent,'data'=>$data]);
+            $parent=$this->business->getParentData();
+//            $data=$this->permission_list;
+            return View::fetch('',['parent'=>$parent]);
         }
     }
 
     public function list()
     {
-        return json($this->permission_list['data']);
+        return json($this->permission_list);
     }
 
     /**
@@ -70,6 +69,7 @@ class Permission extends BaseController
                     return jsonShow(0, $this->validate->getError());
                 }
             } else {
+                /** @var TYPcE_NAME $this */
                 if (!$this->validate->scene('add_parent')->check($data)) {
                     return jsonShow(0, $this->validate->getError());
                 }
@@ -84,6 +84,17 @@ class Permission extends BaseController
                 return jsonShow(0, "服务器内部错误");
             }
 
+        }
+    }
+
+    /**
+     * @return mixed
+     */
+    public function edit(){
+        if($this->request->isGet()){
+            $id=input('id','','int');
+            print_r($id);
+            return View::fetch('');
         }
     }
 }

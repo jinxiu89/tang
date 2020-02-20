@@ -32,11 +32,23 @@ class Permission
             abort(500, "服务器内部错误");
         }
     }
-    public function getAllData(int $status=1){
+
+    public function getAllData(int $status = 1)
+    {
         try {
             $result = $this->model->getAllData($status);
             return $result->toArray();
-        } catch (\Exception $exception){
+        } catch (\Exception $exception) {
+            return [];
+        }
+    }
+
+    public function getParentData(int $status = 1)
+    {
+        try {
+            $result = $this->model->getParentData((int)$status);
+            return $result->toArray();
+        } catch (\Exception $exception) {
             return [];
         }
     }

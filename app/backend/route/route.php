@@ -26,7 +26,8 @@ Route::group('user', function () {
     Route::rule('/permission/list', 'Permission/list', 'GET')->name('permission_list');
     Route::rule('/permission', 'Permission/index', 'GET')->name('permission');
     Route::rule('/add_permission', 'Permission/add', 'POST')->name('add_permission');
-})->middleware(Auth::class);
+    Route::rule('/edit_permission', 'Permission/edit', 'GET')->name('edit_permission')->parttern(['id'=>'\d+']);
+})->prefix('backend/')->middleware(Auth::class);
 /**
  * Route
  * 后台需要认证的路由分组，每条路由都有一个name（）,在后面的url生成时非常有用
