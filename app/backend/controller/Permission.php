@@ -15,10 +15,12 @@ namespace app\backend\controller;
 use app\BaseController;
 use Exception;
 use think\App;
+use think\exception\HttpException;
 use think\facade\View;
 use app\backend\validate\Permission as PermissionValidate;
 use app\backend\business\Permission as PermissionModel;
 use think\response\Json;
+use app\common\business\lib\Category;
 
 /***
  * Class Permission
@@ -28,7 +30,9 @@ class Permission extends BaseController
 {
     protected $validate = null;
     protected $business = null;
-    protected $permission_list=null;
+    protected $permission_list = null;
+    protected $parent=null;
+
     /***
      * Permission constructor.
      * @param App $app
@@ -38,15 +42,17 @@ class Permission extends BaseController
         parent::__construct($app);
         $this->validate = new PermissionValidate();
         $this->business = new PermissionModel();
-        $this->permission_list=$this->business->getDataByStatus((int)1);
+        $data = $this->business->getDataByStatus((int)1);
+        /** @var TYPE_NAME $data */
+        $this->permission_list = Category::toLevel($data,'--',0,0);
+        $this->parent = $this->business->getParentData();
     }
 
     public function index()
     {
         if ($this->request->isGet()) {
-            $parent=$this->business->getParentData();
-//            $data=$this->permission_list;
-            return View::fetch('',['parent'=>$parent]);
+
+            return View::fetch('', ['parent' => $this->parent]);
         }
     }
 
@@ -89,12 +95,31 @@ class Permission extends BaseController
 
     /**
      * @return mixed
+     * @throws Exception
      */
-    public function edit(){
-        if($this->request->isGet()){
-            $id=input('id','','int');
-            print_r($id);
-            return View::fetch('');
+    public function edit()
+    {
+        if ($this->request->isGet()) {
+            $id = input('id', '', 'intval');
+            if (!$this->validate->scene('id')->check(['id' => $id])) {
+                throw new HttpException(500, $this->validate->getError());
+            }
+            $result = $this->business->getDataById($id);
+            return View::fetch('', ['result' => $result, 'list' => $this->parent]);
+        }
+        if($this->request->isPost()){
+            $data=input('post.',[],'htmlspecialchars');
+            if($data['pid'] == $data['id']){
+                return jsonShow(0,'权限父级分类不能是他本身',[],500);
+            }
+            if(!$this->validate->scene('edit')->check($data)){
+                abort(500,$this->validate->getError());
+            }
+            $result=$this->business->save((array) $data);
+            if($result){
+                return jsonShow(1,'保存成功！');
+            }
+            return jsonShow(0,'未知原因的错误');
         }
     }
 }

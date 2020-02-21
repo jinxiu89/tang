@@ -26,7 +26,7 @@ Route::group('user', function () {
     Route::rule('/permission/list', 'Permission/list', 'GET')->name('permission_list');
     Route::rule('/permission', 'Permission/index', 'GET')->name('permission');
     Route::rule('/add_permission', 'Permission/add', 'POST')->name('add_permission');
-    Route::rule('/edit_permission', 'Permission/edit', 'GET')->name('edit_permission')->parttern(['id'=>'\d+']);
+    Route::rule('/edit_permission', 'Permission/edit', 'GET|POST')->name('edit_permission')->parttern(['id'=>'\d+']);
 })->prefix('backend/')->middleware(Auth::class);
 /**
  * Route

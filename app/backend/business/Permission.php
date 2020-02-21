@@ -14,6 +14,10 @@ namespace app\backend\business;
 use think\db\exception\DbException;
 use app\common\models\mysql\Permission as model;
 
+/***
+ * Class Permission
+ * @package app\backend\business
+ */
 class Permission
 {
     protected $model = null;
@@ -23,6 +27,10 @@ class Permission
         $this->model = new model();
     }
 
+    /***
+     * @param int $status
+     * @return array
+     */
     public function getDataByStatus(int $status)
     {
         try {
@@ -60,6 +68,22 @@ class Permission
             return $result->id;
         } catch (\Exception $exception) {
             abort(500, "服务器内部错误");
+        }
+    }
+    public function save(array $data){
+        try{
+            $result=$this->model::update($data);
+            return $result->id;
+
+        }catch (\Exception $exception){
+            abort(500,"服务器内部错误");
+        }
+    }
+    public function getDataById(int $id){
+        try{
+            return $this->model::find($id);
+        }catch (\Exception $exception){
+            abort(500,"服务器内部错误!");
         }
     }
 }

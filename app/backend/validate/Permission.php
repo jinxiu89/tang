@@ -31,6 +31,7 @@ class Permission extends Validate {
         'add_parent'=>['name'],
         'add_child'=>['name','handler'],
         'edit_parent'=>['id','name'],
-        'edit_child'=>['id','name','handler']
+        'edit_child'=>['id','name','handler'],
+        'id'=>['id'],
     ];
 }

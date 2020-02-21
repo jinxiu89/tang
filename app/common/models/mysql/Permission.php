@@ -14,6 +14,10 @@ namespace app\common\models\mysql;
 
 use think\Model;
 
+/**
+ * Class Permission
+ * @package app\common\models\mysql
+ */
 class Permission extends Model
 {
     protected $table = "permission";
