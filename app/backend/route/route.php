@@ -23,10 +23,11 @@ Route::group('user', function () {
     Route::rule('/add', 'User/add', 'GET|POST')->name('user_add');
     Route::rule('/edit/:id', 'User/edit', 'GET|POST')->name('user_edit')->pattern(['id' => '\d+']);
     //权限
-    Route::rule('/permission/list', 'Permission/list', 'GET')->name('permission_list');
-    Route::rule('/permission', 'Permission/index', 'GET')->name('permission');
-    Route::rule('/add_permission', 'Permission/add', 'POST')->name('add_permission');
-    Route::rule('/edit_permission', 'Permission/edit', 'GET|POST')->name('edit_permission')->parttern(['id'=>'\d+']);
+    //路由的rule 完全匹配用$结尾
+    Route::rule('/permission/list$', 'Permission/list', 'GET')->name('permission_list');
+    Route::rule('/permission/add_permission$', 'Permission/add', 'POST')->name('add_permission');
+    Route::rule('/permission/edit_permission$', 'Permission/edit', 'GET|POST')->name('edit_permission')->parttern(['id'=>'\d+']);
+    Route::rule('/permission$', 'Permission/index', 'GET')->name('permission');
 })->prefix('backend/')->middleware(Auth::class);
 /**
  * Route

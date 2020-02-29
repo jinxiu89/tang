@@ -64,6 +64,7 @@ class Permission
     public function add(array $data)
     {
         try {
+
             $result = $this->model::create($data);
             return $result->id;
         } catch (\Exception $exception) {

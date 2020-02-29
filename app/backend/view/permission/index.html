@@ -101,8 +101,11 @@
                     width: '100px',
                     align: 'center',
                     template: function (item) {
-                        return '<input type="checkbox" name="close" lay-skin="switch" lay-text="正常|禁用">';
-
+                        if (item.status === 1){
+                            return '<input type="checkbox" name="status" class="status" lay-skin="switch" lay-text="正常|禁用" value=\'1\' checked>';
+                        } else{
+                            return '<input type="checkbox" name="status" class="status" lay-skin="switch" lay-text="正常|禁用" value=\'0\'>';
+                        }
                     }
                 },
                 {
@@ -142,9 +145,13 @@
         );
 
         // // 监听展开关闭
-        // treeTable.on('tree(flex)',function(data){
-        //     layer.msg(JSON.stringify(data));
-        // });
+        treeTable.on('tree(flex)',function(data){
+            layer.msg(JSON.stringify(data));
+        });
+        $('.status').click(function () {
+            const status=$('.status').value;
+            console.log(status);
+        });
     });
 
     /*用户-停用*/
@@ -181,7 +188,7 @@
     }
 
     function edit_permission(obj, id) {
-        xadmin.open('编辑', "/backend/user/edit_permission.html?id=" + id, '640', '480');
+        xadmin.open('编辑', "/backend/user/permission/edit_permission.html?id=" + id, '640', '480');
     }
 
 

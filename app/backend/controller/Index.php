@@ -3,12 +3,14 @@
 namespace app\backend\controller;
 
 use app\BaseController;
+use think\App;
 use think\facade\View;
 
 class Index extends BaseController
 {
     public function index()
     {
+
 
         if ($this->request->isGet()) {
             return View::fetch();
@@ -21,4 +23,5 @@ class Index extends BaseController
             return View::fetch();
         }
     }
+    
 }
