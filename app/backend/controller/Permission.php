@@ -18,7 +18,7 @@ use think\App;
 use think\exception\HttpException;
 use think\facade\View;
 use app\backend\validate\Permission as PermissionValidate;
-use app\backend\business\Permission as PermissionModel;
+use app\common\business\bus\Permission as PermissionBis;
 use think\response\Json;
 use app\common\business\lib\Category;
 
@@ -41,8 +41,8 @@ class Permission extends BaseController
     {
         parent::__construct($app);
         $this->validate = new PermissionValidate();
-        $this->business = new PermissionModel();
-        $data = $this->business->getDataByStatus((int)1);
+        $this->business = new PermissionBis();
+        $data = $this->business->getAllDataByStatus((int) 1);
         /** @var TYPE_NAME $data */
         $this->permission_list = Category::toLevel($data,'--',0,0);
         $this->parent = $this->business->getParentData();

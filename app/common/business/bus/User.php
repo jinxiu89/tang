@@ -65,11 +65,16 @@ class User extends BaseBis
      * GetNormalData
      * 获得正常的用户数据列表
      */
-    public function GetDataByStatus()
-    {
-        $obj = UserModel::GetDataByStatS();
-        return $obj->toArray();
-    }
+//    public function GetDataByStatus()
+//    {
+//        try{
+//            $obj = UserModel::GetDataByStatS();
+//            return $obj->toArray();
+//        }catch (\Exception $exception){
+//            return [];
+//        }
+//    }
+
 
     public function getData(int $id)
     {

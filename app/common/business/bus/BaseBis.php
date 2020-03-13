@@ -32,6 +32,20 @@ class BaseBis
         }
     }
 
+    /**
+     * save 通用跟新保存
+     * @param array $data
+     * @return mixed
+     */
+    public function save(array $data){
+        try{
+            $result=$this->model::update($data,['id'=>$data['id']]);
+            return $result->id;
+        }catch (\Exception $exception){
+            abort(500,"服务器内部错误");
+        }
+    }
+
     /***
      *
      * update
@@ -52,5 +66,15 @@ class BaseBis
             abort(500, "服务器内部异常");
         }
         return false;
+    }
+
+    /**
+     * @param int $status
+     * @return mixed
+     */
+    public function GetDataByStatus(int $status){
+
+        $obj=$this->model::GetDataByStatus((int) $status);
+        return $obj->toArray();
     }
 }

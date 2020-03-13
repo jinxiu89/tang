@@ -11,6 +11,7 @@ declare(strict_types=1);
 
 namespace app\common\models\mysql;
 
+use think\db\exception\DbException;
 use think\Model;
 
 /***
@@ -20,7 +21,9 @@ use think\Model;
  */
 class BaseModel extends Model
 {
+    protected $autoWriteTimestamp = true;
     protected $model;
+
     /***
      * @param array $data
      * @return mixed
@@ -36,4 +39,38 @@ class BaseModel extends Model
         }
     }
 
+    /**
+     * GetDataByStatS 根据状态来获取列表数据
+     * @param int $status
+     * @return mixed
+     * @throws DbException
+     */
+    public static function GetDataByStatus(int $status = 1)
+    {
+        return self::where(['status' => $status])->order('id', 'desc')->paginate(5);
+    }
+
+    /***
+     * updateDataByID 根据ID更新数据
+     *
+     * @param int $id
+     * @param array $data
+     * @return BaseModel
+     */
+    public static function updateDataByID(int $id, array $data)
+    {
+
+        return self::update($data, ['id' => $id]);
+    }
+
+    /**
+     * getDataById 根据ID来获取数据
+     *
+     * @param int $id
+     * @return mixed
+     */
+    public static function getDataById(int $id)
+    {
+        return self::findOrEmpty($id);
+    }
 }

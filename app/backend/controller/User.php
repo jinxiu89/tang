@@ -11,8 +11,8 @@ declare(strict_types=1);
 
 namespace app\backend\controller;
 
-use app\backend\validate\User as UserValidate;
 use app\BaseController;
+use app\backend\validate\User as UserValidate;
 use app\common\business\bus\User as UserBis;
 use Exception;
 use think\App;
@@ -48,7 +48,7 @@ class User extends BaseController
     {
         if ($this->request->isGet()) {
             try {
-                $data = $this->business->GetDataByStatus();
+                $data = $this->business->GetDataByStatus((int) 1);
                 return View::fetch('', [
                     'data' => $data,]);
             } catch (Exception $exception) {

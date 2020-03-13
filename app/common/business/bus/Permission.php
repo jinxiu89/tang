@@ -26,13 +26,15 @@ class Permission extends BaseBis
     }
 
     /***
+     * getAllDataByStatus 获取数据，只要是状态值为传过来的，不分页查询出来
+     * 为什么有此方法？
      * @param int $status
      * @return array
      */
-    public function getDataByStatus(int $status)
+    public function getAllDataByStatus(int $status)
     {
         try {
-            $result = $this->model::getDataByStatus($status);
+            $result = $this->model::getAllDataByStatus($status);
             return $result->toArray();
         } catch (\Exception $exception) {
             abort(500, "服务器内部错误");

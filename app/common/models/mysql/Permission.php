@@ -18,7 +18,7 @@ use think\Model;
  * Class Permission
  * @package app\common\models\mysql
  */
-class Permission extends Model
+class Permission extends BaseModel
 {
     protected $table = "permission";
 
@@ -27,7 +27,15 @@ class Permission extends Model
 
     }
 
-    public static function getDataByStatus(int $status)
+    /**
+     * GetDataByStatS 根据状态来获取列表数据
+     * @param int $status
+     * @return mixed
+     * @throws \think\db\exception\DataNotFoundException
+     * @throws \think\db\exception\DbException
+     * @throws \think\db\exception\ModelNotFoundException
+     */
+    public static function getAllDataByStatus(int $status)
     {
         return self::where(['status' => $status])->order(['pid'=>'desc'])->select();
     }
