@@ -9,7 +9,7 @@
  ***/
 declare(strict_types=1);
 
-namespace app\backend\business;
+namespace app\common\business\bus;
 
 use think\db\exception\DbException;
 use app\common\models\mysql\Permission as model;
@@ -18,10 +18,8 @@ use app\common\models\mysql\Permission as model;
  * Class Permission
  * @package app\backend\business
  */
-class Permission
+class Permission extends BaseBis
 {
-    protected $model = null;
-
     public function __construct()
     {
         $this->model = new model();
@@ -34,7 +32,7 @@ class Permission
     public function getDataByStatus(int $status)
     {
         try {
-            $result = $this->model->getDataByStatus($status);
+            $result = $this->model::getDataByStatus($status);
             return $result->toArray();
         } catch (\Exception $exception) {
             abort(500, "服务器内部错误");
@@ -44,7 +42,7 @@ class Permission
     public function getAllData(int $status = 1)
     {
         try {
-            $result = $this->model->getAllData($status);
+            $result = $this->model::getAllData($status);
             return $result->toArray();
         } catch (\Exception $exception) {
             return [];
@@ -54,32 +52,15 @@ class Permission
     public function getParentData(int $status = 1)
     {
         try {
-            $result = $this->model->getParentData((int)$status);
+            $result = $this->model::getParentData((int)$status);
             return $result->toArray();
         } catch (\Exception $exception) {
             return [];
         }
     }
 
-    public function add(array $data)
-    {
-        try {
 
-            $result = $this->model::create($data);
-            return $result->id;
-        } catch (\Exception $exception) {
-            abort(500, "服务器内部错误");
-        }
-    }
-    public function save(array $data){
-        try{
-            $result=$this->model::update($data);
-            return $result->id;
 
-        }catch (\Exception $exception){
-            abort(500,"服务器内部错误");
-        }
-    }
     public function getDataById(int $id){
         try{
             return $this->model::find($id);

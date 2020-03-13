@@ -9,18 +9,23 @@
  ***/
 declare(strict_types=1);
 
-namespace app\backend\business;
+namespace app\common\business\bus;
 
 use app\common\models\mysql\User as UserModel;
 use think\facade\Session;
 
-class User
+/**
+ * Class User
+ * @package app\backend\business
+ */
+class User extends BaseBis
 {
-    protected $UserModel = null;
-
+    /***
+     * User constructor.
+     */
     public function __construct()
     {
-        $this->UserModel = new UserModel();
+        $this->model = new UserModel();
     }
 
     /***
@@ -31,7 +36,7 @@ class User
      */
     public function login(array $data)
     {
-        $User = $this->UserModel::getDataByUserName($data['username']);
+        $User = $this->model::getDataByUserName($data['username']);
         if ($User->isEmpty()) {
             abort(500, "用户不存在");
         }
@@ -42,44 +47,12 @@ class User
         $upData = ['login_num' => $User->login_num + 1, 'last_ip' => get_client_ip(), 'last_login' => time()];
         //更新
         try {
-            $upResult = $this->UserModel::updateDataByID($User->id, $upData);
+            $upResult = $this->model::updateDataByID($User->id, $upData);
             if ($upResult->isEmpty()) {
                 abort(500, '登录失败，内部数据异常');
             }
             //写入session,这里写session 异常待处理
             Session::set('adminUser', ['id' => $User->id, 'username' => $User->username]);
-            return true;
-        } catch (\Exception $exception) {//数据库错误时会出发该异常
-            abort(500, "服务器内部异常");
-        }
-        return false;
-    }
-
-    public function add(array $data)
-    {
-        try {
-            $result = $this->UserModel::create($data);
-            return $result->id;
-        } catch (\Exception $exception) {
-            abort(500, "服务器内部异常");
-        }
-    }
-
-
-    /***
-     * update
-     * 用户提交后台
-     * @param array $data
-     * @return bool
-     */
-    public function update(array $data)
-    {
-        try {
-
-            $upResult = $this->UserModel::updateDataByID((int)$data['id'], (array)$data);
-            if ($upResult->isEmpty()) {
-                return false;
-            }
             return true;
         } catch (\Exception $exception) {//数据库错误时会出发该异常
             abort(500, "服务器内部异常");

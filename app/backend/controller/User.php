@@ -11,27 +11,39 @@ declare(strict_types=1);
 
 namespace app\backend\controller;
 
-use app\backend\business\User as UserBusiness;
 use app\backend\validate\User as UserValidate;
 use app\BaseController;
+use app\common\business\bus\User as UserBis;
 use Exception;
 use think\App;
 use think\facade\Session;
 use think\facade\View;
+use think\response\Json;
 
+/***
+ * Class User
+ * @package app\backend\controller
+ */
 class User extends BaseController
 {
     protected $validate;
     protected $business;
     protected $next;
 
+    /***
+     * User constructor.
+     * @param App $app
+     */
     public function __construct(App $app)
     {
         parent::__construct($app);
         $this->validate = new UserValidate();
-        $this->business = new UserBusiness();
+        $this->business = new UserBis();
     }
 
+    /**
+     * @return string|Json
+     */
     public function index()
     {
         if ($this->request->isGet()) {
@@ -45,6 +57,10 @@ class User extends BaseController
         }
     }
 
+    /**
+     * @return string|Json
+     * @throws Exception
+     */
     public function add()
     {
         if ($this->request->isGet()) {
@@ -108,7 +124,7 @@ class User extends BaseController
     /***
      * login
      * 登录方法，采用多层架构编写
-     * @return string|\think\response\Json
+     * @return string|Json
      * @throws Exception
      */
     public function login()
@@ -138,11 +154,18 @@ class User extends BaseController
         }
     }
 
+    /**
+     *
+     */
     public function logout()
     {
 
     }
 
+    /**
+     * @return string
+     * @throws Exception
+     */
     public function reg()
     {
         if ($this->request->isGet()) {
@@ -153,6 +176,10 @@ class User extends BaseController
         }
     }
 
+    /**
+     * @return string
+     * @throws Exception
+     */
     public function reset()
     {
         if ($this->request->isGet()) {
