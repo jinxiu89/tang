@@ -13,6 +13,11 @@ namespace app\backend\validate;
 
 
 use think\Validate;
+
+/**
+ * Class Permission
+ * @package app\backend\validate
+ */
 class Permission extends Validate {
     protected $rule=[
         'id'=>'require|number',

@@ -28,6 +28,8 @@ Route::group('user', function () {
     Route::rule('/permission/add_permission$', 'Permission/add', 'POST')->name('add_permission');
     Route::rule('/permission/edit_permission$', 'Permission/edit', 'GET|POST')->name('edit_permission')->parttern(['id'=>'\d+']);
     Route::rule('/permission$', 'Permission/index', 'GET')->name('permission');
+    Route::rule('/role/list$','Role/index','GET')->name('role_list');
+    Route::rule('/role/add$','Role/add','GET|POST')->name('add_role');
 })->prefix('backend/')->middleware(Auth::class);
 /**
  * Route

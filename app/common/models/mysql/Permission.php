@@ -12,6 +12,9 @@ declare(strict_types=1);
 namespace app\common\models\mysql;
 
 
+use think\db\exception\DataNotFoundException;
+use think\db\exception\DbException;
+use think\db\exception\ModelNotFoundException;
 use think\Model;
 
 /**
@@ -31,9 +34,9 @@ class Permission extends BaseModel
      * GetDataByStatS 根据状态来获取列表数据
      * @param int $status
      * @return mixed
-     * @throws \think\db\exception\DataNotFoundException
-     * @throws \think\db\exception\DbException
-     * @throws \think\db\exception\ModelNotFoundException
+     * @throws DataNotFoundException
+     * @throws DbException
+     * @throws ModelNotFoundException
      */
     public static function getAllDataByStatus(int $status)
     {

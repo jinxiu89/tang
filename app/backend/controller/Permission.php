@@ -28,10 +28,10 @@ use app\common\business\lib\Category;
  */
 class Permission extends BaseController
 {
-    protected $validate = null;
-    protected $business = null;
-    protected $permission_list = null;
-    protected $parent=null;
+    protected $validate = null; //验证层
+    protected $business = null; //业务逻辑层
+    protected $permission_list = null; //权限列表
+    protected $parent=null; //调出一级分类
 
     /***
      * Permission constructor.
@@ -43,7 +43,6 @@ class Permission extends BaseController
         $this->validate = new PermissionValidate();
         $this->business = new PermissionBis();
         $data = $this->business->getAllDataByStatus((int) 1);
-        /** @var TYPE_NAME $data */
         $this->permission_list = Category::toLevel($data,'--',0,0);
         $this->parent = $this->business->getParentData();
     }
