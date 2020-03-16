@@ -43,17 +43,14 @@ class User extends BaseController
 
     /**
      * @return string|Json
+     * @throws Exception
      */
     public function index()
     {
         if ($this->request->isGet()) {
-            try {
-                $data = $this->business->GetDataByStatus((int) 1);
-                return View::fetch('', [
-                    'data' => $data,]);
-            } catch (Exception $exception) {
-                return jsonShow(0, $exception->getMessage(), [], 500);
-            }
+            $data = $this->business->GetDataByStatus((int)1);
+            return View::fetch('', [
+                'data' => $data,]);
         }
     }
 

@@ -31,14 +31,27 @@ class Role extends BaseModel
      */
     public static function getPermissionsByStatus(int $status)
     {
-        return Permission::getAllDataByStatus((int) $status);
+        return Permission::getAllDataByStatus((int)$status);
+    }
+
+    /**
+     * @param array $ids
+     * @return Collection
+     * @throws DataNotFoundException
+     * @throws DbException
+     * @throws ModelNotFoundException
+     */
+    public static function getPermissionsByIds(array $ids)
+    {
+        return Permission::getDataByIds((array)$ids);
     }
 
     /**
      * @param int $status
      * @return Collection|Model
      */
-    public static function getParents(int $status){
-        return Permission::getParentData((int) $status);
+    public static function getParents(int $status)
+    {
+        return Permission::getParentData((int)$status);
     }
 }

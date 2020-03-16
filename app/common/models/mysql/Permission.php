@@ -12,6 +12,7 @@ declare(strict_types=1);
 namespace app\common\models\mysql;
 
 
+use think\Collection;
 use think\db\exception\DataNotFoundException;
 use think\db\exception\DbException;
 use think\db\exception\ModelNotFoundException;
@@ -41,6 +42,17 @@ class Permission extends BaseModel
     public static function getAllDataByStatus(int $status)
     {
         return self::where(['status' => $status])->order(['pid'=>'desc'])->select();
+    }
+
+    /**
+     * @param array $ids
+     * @return Collection
+     * @throws DataNotFoundException
+     * @throws DbException
+     * @throws ModelNotFoundException
+     */
+    public static function getDataByIds(array $ids){
+        return self::select($ids);
     }
 
     public static function getAllData(int $status)

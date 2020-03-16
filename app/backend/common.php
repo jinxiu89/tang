@@ -24,3 +24,10 @@
     ];
     return json($result,$httpStatus);
 }
+
+/**
+ * @param array $permissions
+ */
+function getPermissions(array $permissions){
+
+}

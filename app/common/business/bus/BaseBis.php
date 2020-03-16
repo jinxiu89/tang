@@ -73,8 +73,11 @@ class BaseBis
      * @return mixed
      */
     public function GetDataByStatus(int $status){
-
-        $obj=$this->model::GetDataByStatus((int) $status);
-        return $obj->toArray();
+        try{
+            $obj=$this->model::GetDataByStatus((int) $status);
+            return $obj->toArray();
+        }catch (\Exception $exception){
+            abort(500,'服务器内部错误');
+        }
     }
 }

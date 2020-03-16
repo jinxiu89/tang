@@ -41,7 +41,16 @@ class Role extends BaseController
      */
     public function index(){
         if($this->request->isGet()){
-            return View::fetch();
+            $result=$this->business->GetDataByStatus((int) 1);
+            $data=$result['data'];
+            unset($result['data']);
+            foreach ($data as &$item){
+                $item['permission']=$this->business->getPermissionsByIds((string) $item['permissions']);
+            }
+            return View::fetch('',[
+                'data'=>$data,
+                'page'=>$result,
+            ]);
         }
     }
 

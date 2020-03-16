@@ -10,7 +10,12 @@
 declare(strict_types=1);
 
 namespace app\common\business\bus;
+
 use app\common\models\mysql\Role as RoleModel;
+use Exception;
+use think\db\exception\DataNotFoundException;
+use think\db\exception\DbException;
+use think\db\exception\ModelNotFoundException;
 
 /**
  *
@@ -19,32 +24,53 @@ class Role extends BaseBis
 {
     public function __construct()
     {
-        $this->model=new RoleModel();
+        $this->model = new RoleModel();
     }
+
 
     /**
      * @param int $status
      * @return array
      */
-    public function getPermissionsByStatus(int $status=1){
-        try{
-            $obj=$this->model::getPermissionsByStatus((int) $status);
+    public function getPermissionsByStatus(int $status = 1)
+    {
+        try {
+            $obj = $this->model::getPermissionsByStatus((int)$status);
             return $obj->toArray();
-        }catch (\Exception $exception){
-            abort(500,'服务器内部错误');
+        } catch (Exception $exception) {
+            abort(500, '服务器内部错误');
         }
+    }
+
+    /**
+     * @param string $permissions
+     * @return string
+     * @throws DataNotFoundException
+     * @throws DbException
+     * @throws ModelNotFoundException
+     */
+    public function getPermissionsByIds(string $permissions)
+    {
+        $ids = explode(',', $permissions);
+        $results = $this->model::getPermissionsByIds((array)$ids);
+        $permissions = '';
+        foreach ($results as $result) {
+            $permissions .= $result['name'].' ';
+        }
+        return $permissions;
     }
 
     /**
      * @return array
      */
-    public function getParent(){
-        try{
-            $obj=$this->model::getParents((int) 1);
+    public function getParent()
+    {
+        try {
+            $obj = $this->model::getParents((int)1);
             return $obj->toArray();
-        }catch (\Exception $exception){
+        } catch (Exception $exception) {
             //todo::写错误日志
-            abort(500,'服务器内部错误');
+            abort(500, '服务器内部错误');
         }
     }
 }
