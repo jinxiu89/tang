@@ -30,6 +30,7 @@ Route::group('user', function () {
     Route::rule('/permission$', 'Permission/index', 'GET')->name('permission');
     Route::rule('/role/list$','Role/index','GET')->name('role_list');
     Route::rule('/role/add$','Role/add','GET|POST')->name('add_role');
+    Route::rule('/role/edit$','Role/edit','GET|POST')->name('edit_role');
 })->prefix('backend/')->middleware(Auth::class);
 /**
  * Route

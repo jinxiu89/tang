@@ -11,7 +11,6 @@ declare(strict_types=1);
 
 namespace app\common\business\bus;
 
-use think\db\exception\DbException;
 use app\common\models\mysql\Permission as model;
 
 /***
@@ -63,11 +62,11 @@ class Permission extends BaseBis
 
 
 
-    public function getDataById(int $id){
+    /*public function getDataById(int $id){
         try{
             return $this->model::find($id);
         }catch (\Exception $exception){
             abort(500,"服务器内部错误!");
         }
-    }
+    }*/
 }

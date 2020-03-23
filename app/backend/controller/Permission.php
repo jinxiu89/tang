@@ -114,7 +114,7 @@ class Permission extends BaseController
             if(!$this->validate->scene('edit')->check($data)){
                 abort(500,$this->validate->getError());
             }
-            $result=$this->business->save((array) $data);
+            $result=$this->business->update((array) $data);
             if($result){
                 return jsonShow(1,'保存成功！');
             }

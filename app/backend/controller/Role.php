@@ -13,10 +13,14 @@ namespace app\backend\controller;
 
 
 use app\BaseController;
+use Exception;
 use think\App;
+use think\exception\HttpException;
 use think\facade\View;
 use app\common\business\bus\Role as RoleBis;
 use app\backend\validate\Role as RoleValidate;
+use think\response\Json;
+
 /**
  * Class Role
  * @package app\backend\controller
@@ -25,6 +29,8 @@ class Role extends BaseController
 {
     protected $validate = null;
     protected $business = null;
+    protected $permissions;
+    protected $parent;
     /**
      * Role constructor.
      * @param App $app
@@ -34,6 +40,8 @@ class Role extends BaseController
         parent::__construct($app);
         $this->business=new RoleBis();
         $this->validate= new RoleValidate();
+        $this->permissions=$this->business->getPermissionsByStatus();
+        $this->parent=$this->business->getParent();
     }
 
     /**
@@ -54,14 +62,17 @@ class Role extends BaseController
         }
     }
 
+    /**
+     * @return string|Json
+     * @throws Exception
+     */
     public function add(){
         if($this->request->isGet()){
             //列出所有权限
-            $permissions=$this->business->getPermissionsByStatus();
-            $parent=$this->business->getParent();
+
             return View::fetch('',[
-                'parent'=>$parent,
-                'permissions'=>$permissions
+                'parent'=>$this->parent,
+                'permissions'=>$this->permissions
             ]);
         }
         if($this->request->isPost()){
@@ -69,10 +80,40 @@ class Role extends BaseController
             if(!$this->validate->scene('add_role')->check($data)){
                 abort(500,$this->validate->getError());
             }
-            $permissionsIds=implode(',',$data['permissions']);
-            unset($data['permissions']);
-            $data['permissions']=$permissionsIds;
+            $data['permissions']=implode(',',$data['permissions']);
             $result=$this->business->add((array) $data);
+            if($result){
+                return jsonShow(1,'保存成功！');
+            }
+            return jsonShow(0,'未知原因的错误');
+        }
+    }
+
+    /**
+     * @return string
+     * @throws Exception
+     */
+    public function edit(){
+        if($this->request->isGet()){
+            $id = input('id', '', 'intval');
+            if (!$this->validate->scene('id')->check(['id' => $id])) {
+                throw new HttpException(500, $this->validate->getError());
+            }
+            $result=$this->business->getDataById((int) $id)->toArray();
+            $result['permissions']=explode(',',$result['permissions']);
+            return View::fetch('',[
+                'result'=>$result,
+                'parent'=>$this->parent,
+                'permissions'=>$this->permissions]);
+        }
+        if($this->request->isPost()){
+            //todo::保存操作
+            $data=input('post.',[],'htmlspecialchars');
+            if(!$this->validate->scene('edit_role')->check($data)){
+                abort(500,$this->validate->getError());
+            }
+            $data['permissions']=implode(',',$data['permissions']);
+            $result=$this->business->update($data);
             if($result){
                 return jsonShow(1,'保存成功！');
             }

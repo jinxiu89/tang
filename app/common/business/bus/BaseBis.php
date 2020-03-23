@@ -18,6 +18,7 @@ namespace app\common\business\bus;
 class BaseBis
 {
     protected $model;
+
     /***
      * @param array $data
      * @return mixed
@@ -32,19 +33,23 @@ class BaseBis
         }
     }
 
-    /**
+    /*
      * save 通用跟新保存
      * @param array $data
      * @return mixed
+     * 准备废弃代码
      */
-    public function save(array $data){
-        try{
-            $result=$this->model::update($data,['id'=>$data['id']]);
+    /**
+    public function save(array $data)
+    {
+        try {
+            $result = $this->model::update($data, ['id' => $data['id']]);
             return $result->id;
-        }catch (\Exception $exception){
-            abort(500,"服务器内部错误");
+        } catch (\Exception $exception) {
+            abort(500, "服务器内部错误");
         }
     }
+    */
 
     /***
      *
@@ -57,7 +62,7 @@ class BaseBis
     {
         try {
 
-            $upResult = $this->model::updateDataByID((int)$data['id'], (array)$data);
+            $upResult = $this->model::update((array)$data,(int) $data['id']);
             if ($upResult->isEmpty()) {
                 return false;
             }
@@ -70,14 +75,31 @@ class BaseBis
 
     /**
      * @param int $status
+     * 根据状态值查询出数据
      * @return mixed
      */
-    public function GetDataByStatus(int $status){
-        try{
-            $obj=$this->model::GetDataByStatus((int) $status);
+    public function GetDataByStatus(int $status)
+    {
+        try {
+            $obj = $this->model::GetDataByStatus((int)$status);
             return $obj->toArray();
-        }catch (\Exception $exception){
-            abort(500,'服务器内部错误');
+        } catch (\Exception $exception) {
+            abort(500, '服务器内部错误');
+        }
+    }
+
+    /**
+     * getDataByIdgetDataById
+     * 根据ID获取数据
+     * @param int $id
+     * @return mixed
+     */
+    public function getDataById(int $id)
+    {
+        try {
+            return $this->model::find($id);
+        } catch (\Exception $exception) {
+            abort(500, "服务器内部错误!");
         }
     }
 }
