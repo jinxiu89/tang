@@ -103,7 +103,7 @@ class Permission extends BaseController
             if (!$this->validate->scene('id')->check(['id' => $id])) {
                 throw new HttpException(500, $this->validate->getError());
             }
-            $result = $this->business->getDataById($id);
+            $result = $this->business->getDataById((int) $id)->toArray();
             return View::fetch('', ['result' => $result, 'list' => $this->parent]);
         }
         if($this->request->isPost()){

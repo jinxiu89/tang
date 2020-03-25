@@ -12,7 +12,7 @@
                         <option value=""></option>
                         <option value="0">顶级分类</option>
                         {volist name="list" id="vo"}
-                        {if($vo.id == $result->pid)}
+                        {if($vo.id == $result.pid)}
                         <option value="{$vo.id}" selected>{$vo.name}</option>
                         {else /}
                         <option value="{$vo.id}">{$vo.name}</option>
@@ -27,7 +27,7 @@
                 </label>
                 <div class="layui-input-inline">
                     <input type="text" id="name" name="name" required="" lay-verify="required"
-                           value="{$result->name}"
+                           value="{$result.name}"
                            autocomplete="off" class="layui-input">
                 </div>
             </div>
@@ -37,11 +37,11 @@
                 </label>
                 <div class="layui-input-inline">
                     <input type="text" id="handler" name="handler" required="" lay-verify="required"
-                           value="{$result->handler}"
+                           value="{$result.handler}"
                            autocomplete="off" class="layui-input">
                 </div>
             </div>
-            <input type="hidden" name="id" value="{$result->id}">
+            <input type="hidden" name="id" value="{$result.id}">
             <div class="layui-form-item">
                 <label for="add" class="layui-form-label"></label>
                 <button id="add" class="layui-btn" lay-filter="add" lay-submit="">
@@ -65,7 +65,7 @@
         form.on('submit(add)',
             function (data) {
                 $.ajax({
-                    url:'{:url(\'edit_permission\',[\'id\'=>$result->id])}',
+                    url:'{:url(\'edit_permission\',[\'id\'=>$result.id])}',
                     type:'POST',
                     data:data.field,
                     success:function (result) {

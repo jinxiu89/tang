@@ -35,13 +35,15 @@ class Permission extends BaseModel
      * GetDataByStatS 根据状态来获取列表数据
      * @param int $status
      * @return mixed
-     * @throws DataNotFoundException
-     * @throws DbException
-     * @throws ModelNotFoundException
      */
     public static function getAllDataByStatus(int $status)
     {
-        return self::where(['status' => $status])->order(['pid'=>'desc'])->select();
+        try {
+            return self::where(['status' => $status])->order(['pid' => 'desc'])->select();
+        } catch (DataNotFoundException $e) {
+        } catch (ModelNotFoundException $e) {
+        } catch (DbException $e) {
+        }
     }
 
     /**
@@ -55,13 +57,31 @@ class Permission extends BaseModel
         return self::select($ids);
     }
 
+    /**
+     * @param int $status
+     * @return Collection
+     */
     public static function getAllData(int $status)
     {
-        return self::where(['status' => $status])->field('id,name')->order('id desc')->select();
+        try {
+            return self::where(['status' => $status])->field('id,name')->order('id desc')->select();
+        } catch (DataNotFoundException $e) {
+        } catch (ModelNotFoundException $e) {
+        } catch (DbException $e) {
+        }
     }
 
+    /**
+     * @param int $status
+     * @return Collection
+     */
     public static function getParentData(int $status)
     {
-        return self::where(['status' => $status, 'pid' => 0])->field('id,name')->order('id desc')->select();
+        try {
+            return self::where(['status' => $status, 'pid' => 0])->field('id,name,pid')->order('id desc')->select();
+        } catch (DataNotFoundException $e) {
+        } catch (ModelNotFoundException $e) {
+        } catch (DbException $e) {
+        }
     }
 }

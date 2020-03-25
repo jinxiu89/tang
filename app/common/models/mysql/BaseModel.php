@@ -65,7 +65,7 @@ class BaseModel extends Model
 
     /**
      * getDataById 根据ID来获取数据
-     *
+     * 公共查询 通过ID查询数据
      * @param int $id
      * @return mixed
      */

@@ -97,7 +97,7 @@ class BaseBis
     public function getDataById(int $id)
     {
         try {
-            return $this->model::find($id);
+            return $this->model::getDataById($id);
         } catch (\Exception $exception) {
             abort(500, "服务器内部错误!");
         }
